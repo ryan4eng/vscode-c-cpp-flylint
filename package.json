@@ -232,6 +232,12 @@
               "misra-"
             ],
             "markdownDescription": "The diagnostic code match set for which a web lookup will be proposed. Web search engine can be customized through `#c-cpp-flylint.queryUrlBase#`."
+          },
+          "c-cpp-flylint.compileCommandsPath": {
+            "order": 12,
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Full file path to `compile_commands.json`."
           }
         }
       },

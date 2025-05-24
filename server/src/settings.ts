@@ -105,6 +105,7 @@ export interface Settings {
     defines: string[];
     undefines: string[];
     language: 'c' | 'c++';
+    compileCommandsPath: string;
 
     flexelint: {
         enable: boolean;

@@ -24,6 +24,7 @@ export const defaultConfig: GlobalSettings = {
         language: 'c',
         ignoreParseErrors: false,
         excludeFromWorkspacePaths: [],
+        compileCommandsPath: '',
 
         flexelint: {
             enable: true,
