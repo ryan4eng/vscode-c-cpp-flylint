@@ -27,7 +27,8 @@ import * as tmp from 'tmp';
 import * as _ from 'lodash';
 import * as glob from 'fast-glob';
 import { EntryItem } from 'fast-glob/out/types';
-import { GlobalSettings, Settings, IConfigurations, propertiesPlatform } from './settings';
+import { IConfigurations, propertiesPlatform } from './settings';
+import { GlobalSettings, Settings } from '../../common/src/types'
 import { Linter, Lint, fromLint, toLint } from './linters/linter';
 import { RobustPromises, path as sysPath } from './utils';
 
@@ -61,7 +62,7 @@ let hasConfigurationCapability = false;
 // Does the LS client use the Microsoft C/C++ extension?
 let hasMsCppTools = true;
 
-let defaultSettings: Settings;
+//let defaultSettings: Settings;
 let globalSettings: Settings;
 
 // A mapping between an opened document and its' workspace settings.
@@ -137,7 +138,7 @@ connection.onDidChangeConfiguration(async change => {
     if (hasConfigurationCapability) {
         flushCache();
     } else {
-        globalSettings = <Settings>(change.settings[FLYLINT_ID] || defaultSettings);
+        globalSettings = <Settings>(change.settings[FLYLINT_ID] /* || defaultSettings */);
     }
 
     await validateAllDocuments({ force: false });

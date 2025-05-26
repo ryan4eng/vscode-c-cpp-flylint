@@ -4,7 +4,8 @@
 
 import * as path from 'path';
 import * as _ from 'lodash';
-import { FlexelintSeverityMaps, Settings, VS_DiagnosticSeverity } from '../settings';
+import { FlexelintSeverityMaps, Settings } from '../../../common/src/types'
+import { VS_DiagnosticSeverity } from '../settings';
 import { headerExts, Linter } from './linter';
 import { InternalDiagnostic } from '../server';
 import { path as sysPath } from '../utils';

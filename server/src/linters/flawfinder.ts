@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: MIT
 
-import { FlawFinderSeverityMaps, Settings, VS_DiagnosticSeverity } from '../settings';
+import { FlawFinderSeverityMaps, Settings } from '../../../common/src/types'
+import { VS_DiagnosticSeverity } from '../settings';
 import { Linter } from './linter';
 import { InternalDiagnostic } from '../server';
 import { path as sysPath } from '../utils';

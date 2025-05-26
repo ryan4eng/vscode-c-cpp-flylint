@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: MIT
 
 import * as _ from 'lodash';
-import { CppCheckSeverityMaps, Settings, VS_DiagnosticSeverity } from '../settings';
+
+import { CppCheckSeverityMaps, Settings } from '../../../common/src/types'
+import { VS_DiagnosticSeverity } from '../settings';
 import { Linter } from './linter';
 import { InternalDiagnostic } from '../server';
 import { path as sysPath } from '../utils';
