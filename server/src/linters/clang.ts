@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import * as path from 'path';
-import { ClangSeverityMaps, Settings } from '../../../common/src/types'
+import { ClangSeverityMaps, Settings } from 'common/types'
 import { VS_DiagnosticSeverity } from '../settings';
 import { Linter, Lint } from './linter';
 import { InternalDiagnostic } from '../server';

@@ -5,7 +5,7 @@
 import * as _ from 'lodash';
 import * as os from 'os';
 import { DiagnosticSeverity } from 'vscode-languageserver/node';
-import {SeverityLevel} from '../../common/src/types'
+import { SeverityLevel } from 'common/types'
 
 export interface IConfiguration {
     name: string;

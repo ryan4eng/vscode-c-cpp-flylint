@@ -4,7 +4,7 @@
 
 import * as path from 'path';
 import * as _ from 'lodash';
-import { PclintPlusSeverityMaps, Settings } from '../../../common/src/types'
+import { PclintPlusSeverityMaps, Settings } from 'common/types'
 import { VS_DiagnosticSeverity } from '../settings';
 import { headerExts, Linter } from './linter';
 import { InternalDiagnostic } from '../server';

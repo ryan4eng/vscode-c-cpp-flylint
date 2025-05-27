@@ -28,7 +28,7 @@ import * as _ from 'lodash';
 import * as glob from 'fast-glob';
 import { EntryItem } from 'fast-glob/out/types';
 import { IConfigurations, propertiesPlatform } from './settings';
-import { GlobalSettings, Settings } from '../../common/src/types'
+import { GlobalSettings, Settings } from 'common/types'
 import { Linter, Lint, fromLint, toLint } from './linters/linter';
 import { RobustPromises, path as sysPath } from './utils';
 

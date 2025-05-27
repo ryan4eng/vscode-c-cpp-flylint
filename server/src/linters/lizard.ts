@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-import { Settings } from '../../../common/src/types'
+import { Settings } from 'common/types'
 import { Linter } from './linter';
 import { InternalDiagnostic } from '../server';
 import { path as sysPath } from '../utils';

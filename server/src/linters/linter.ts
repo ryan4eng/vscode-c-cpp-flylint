@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as _ from 'lodash';
 import { InternalDiagnostic } from '../server';
-import { Settings } from '../../../common/src/types'
+import { Settings } from 'common/types'
 import { path as sysPath } from '../utils';
 import * as cross_spawn from 'cross-spawn';
 import * as child_process from 'child_process';
