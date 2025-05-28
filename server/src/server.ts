@@ -219,7 +219,7 @@ async function getDocumentSettings(resource: string): Promise<Settings> {
         let workspaceRoot: string = await getWorkspaceRoot(resource);
         let globalSettings: Thenable<GlobalSettings> = connection.workspace.getConfiguration({ scopeUri: resource }).then(s => getMergedSettings(s, workspaceRoot));
         result = globalSettings.then(v => v[FLYLINT_ID]);
-        //result = result.then(r => connection.sendRequest('resolveVSSymbols', r)); //my addition here
+        result = result.then(r => connection.sendRequest('resolveVSSymbols', r)); //my addition here
         documentSettings.set(resource, result);
     }
 

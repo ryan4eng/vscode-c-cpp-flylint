@@ -16,6 +16,9 @@ import { getFromWorkspaceState, resetWorkspaceState, setWorkspaceState, updateWo
 import { isBoolean } from 'lodash';
 import { Settings } from 'common/types'
 
+import * as os from 'os';
+
+
 const FLYLINT_ID: string = 'c-cpp-flylint';
 
 const WORKSPACE_IS_TRUSTED_KEY = 'WORKSPACE_IS_TRUSTED_KEY';
@@ -209,32 +212,9 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
             // VSCode supports various string symbols out of the box, but they do not evaluate automatically.
             // Individually work through each value to ensure they are evaluated as required
             client.onRequest('resolveVSSymbols', async (settings: Settings) => {
-                const activeEditor = vscode.window.activeTextEditor;
-                let scopeUri: vscode.Uri | undefined;
-
-                if (activeEditor) {
-                    scopeUri = activeEditor.document.uri;
-                } else if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0) {
-                    scopeUri = vscode.workspace.workspaceFolders[0].uri;
-                }
-
                 try {
-                    // Step 1: Try VS Code's automatic resolution first
-                    const config = vscode.workspace.getConfiguration(FLYLINT_ID);
-                    let resolvedSettings = JSON.parse(JSON.stringify(settings)); // Deep clone
-
-                    // Step 2: Check if VS Code auto-resolved the variables
-                    const freshConfig = config.get('') as Settings;
-                    if (freshConfig && !hasUnresolvedVariables(freshConfig)) {
-                        return freshConfig;
-                    }
-
-                    // Step 3: If auto-resolution didn't work, use manual resolution
-                    const workspaceFolder = scopeUri ? vscode.workspace.getWorkspaceFolder(scopeUri) :
-                        vscode.workspace.workspaceFolders?.[0];
-
-                    return resolveSettingsObject(resolvedSettings, workspaceFolder);
-
+                    // Do the with resolution
+                    return resolveSettingsObject(settings);
                 } catch (error) {
                     // Step 4: Final fallback - return original settings
                     console.warn('Variable resolution failed:', error);
@@ -259,21 +239,26 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
     context.subscriptions.push(new SettingMonitor(client, `${FLYLINT_ID}.enable`).start());
 }
 
-function hasUnresolvedVariables(obj: any): boolean {
-    if (typeof obj === 'string') {
-        return obj.includes('${');
-    } else if (Array.isArray(obj)) {
-        return obj.some(hasUnresolvedVariables);
-    } else if (obj && typeof obj === 'object') {
-        return Object.values(obj).some(hasUnresolvedVariables);
-    }
-    return false;
-}
-
 // @ts-ignore
 // Keep your manual resolution function as backup
-function resolveSettingsObject(obj: any, workspaceFolder?: vscode.WorkspaceFolder): any {
-    // Your manual implementation from the first artifact
-    // This ensures compatibility even if VS Code's built-in resolution changes
-    console.log("unsupported symbol");
+function resolveSettingsObject(settings: Settings): Settings {
+    // deep copy so we don't touch the original one
+    let resolvedSettings = JSON.parse(JSON.stringify(settings));
+
+    // Grab any substitution variables required
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath || '';
+    const userHome = os.homedir();
+
+    resolvedSettings = resolvedSettings
+        .replace(/\${workspaceFolder}/g, workspaceFolder)
+        .replace(/\${userHome}/g, userHome);
+
+    const unresolvedPattern = /\${([^}]+)}/g;
+
+    let match;
+    while ((match = unresolvedPattern.exec(resolvedSettings)) !== null) {
+        console.warn(`Unhandled substitution at '${path.join('.')}' → \${${match[1]}}`);
+    }
+
+    return resolvedSettings
 }
