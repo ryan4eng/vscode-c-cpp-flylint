@@ -198,13 +198,9 @@ export class Linter {
 
     /* istanbul ignore next */
     private async maybeExecutablePresent(): Promise<string> {
-        console.error("..6..");
-
         const paths = new PathEnv();
-        console.error("..7..");
 
         paths.prepend(path.resolve(__dirname, '../../..'));
-        console.error("..8..");
 
         try {
             const result = await which(this.executable, { path: paths.toString() });
