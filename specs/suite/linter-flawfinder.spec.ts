@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash';
 import { DiagnosticSeverity } from 'vscode-languageserver/node';
 import { FlawFinder } from '../../server/src/linters/flawfinder';
 import { Linter } from '../../server/src/linters/linter';
-import { Settings } from '../../server/src/settings';
+import { Settings } from '../../common/types';
 import { defaultConfig } from '../mock-config';
 import { injectMockFileSystem } from '../mock-fs';
 import { FLYLINT_ID } from '../../server/src/server';

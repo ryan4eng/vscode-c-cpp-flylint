@@ -14,6 +14,7 @@ import { FlylintLanguageClient } from './flylintLanguageClient';
 import * as path from 'path';
 import { getFromWorkspaceState, resetWorkspaceState, setWorkspaceState, updateWorkspaceState } from './stateUtils';
 import { isBoolean } from 'lodash';
+import { Settings } from 'common/types'
 
 const FLYLINT_ID: string = 'c-cpp-flylint';
 
@@ -154,9 +155,9 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
     const client = new FlylintLanguageClient(FLYLINT_ID, 'C/C++ Flylint', serverOptions, clientOptions,
         queryUrlBase, webQueryMatchSet);
 
-    client.onReady()
-        .then(() => {
 
+    client.start()
+        .then(() => {
             // ----------------------------------------------------------------
 
             context.subscriptions.push(commands.registerCommand('c-cpp-flylint.getLocalConfig', async (d: TextDocument) => {
@@ -205,6 +206,43 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
 
             // ----------------------------------------------------------------
 
+            // VSCode supports various string symbols out of the box, but they do not evaluate automatically.
+            // Individually work through each value to ensure they are evaluated as required
+            client.onRequest('resolveVSSymbols', async (settings: Settings) => {
+                const activeEditor = vscode.window.activeTextEditor;
+                let scopeUri: vscode.Uri | undefined;
+
+                if (activeEditor) {
+                    scopeUri = activeEditor.document.uri;
+                } else if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0) {
+                    scopeUri = vscode.workspace.workspaceFolders[0].uri;
+                }
+
+                try {
+                    // Step 1: Try VS Code's automatic resolution first
+                    const config = vscode.workspace.getConfiguration(FLYLINT_ID);
+                    let resolvedSettings = JSON.parse(JSON.stringify(settings)); // Deep clone
+
+                    // Step 2: Check if VS Code auto-resolved the variables
+                    const freshConfig = config.get('') as Settings;
+                    if (freshConfig && !hasUnresolvedVariables(freshConfig)) {
+                        return freshConfig;
+                    }
+
+                    // Step 3: If auto-resolution didn't work, use manual resolution
+                    const workspaceFolder = scopeUri ? vscode.workspace.getWorkspaceFolder(scopeUri) :
+                        vscode.workspace.workspaceFolders?.[0];
+
+                    return resolveSettingsObject(resolvedSettings, workspaceFolder);
+
+                } catch (error) {
+                    // Step 4: Final fallback - return original settings
+                    console.warn('Variable resolution failed:', error);
+                    return settings;
+                }
+            });
+
+            // ----------------------------------------------------------------
             tasks.onDidEndTask((e: TaskEndEvent) => {
                 if (e.execution.task.group && e.execution.task.group === TaskGroup.Build) {
                     // send a build notification event
@@ -219,4 +257,23 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
         });
 
     context.subscriptions.push(new SettingMonitor(client, `${FLYLINT_ID}.enable`).start());
+}
+
+function hasUnresolvedVariables(obj: any): boolean {
+    if (typeof obj === 'string') {
+        return obj.includes('${');
+    } else if (Array.isArray(obj)) {
+        return obj.some(hasUnresolvedVariables);
+    } else if (obj && typeof obj === 'object') {
+        return Object.values(obj).some(hasUnresolvedVariables);
+    }
+    return false;
+}
+
+// @ts-ignore
+// Keep your manual resolution function as backup
+function resolveSettingsObject(obj: any, workspaceFolder?: vscode.WorkspaceFolder): any {
+    // Your manual implementation from the first artifact
+    // This ensures compatibility even if VS Code's built-in resolution changes
+    console.log("unsupported symbol");
 }

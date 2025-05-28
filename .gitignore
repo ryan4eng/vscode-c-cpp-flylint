@@ -10,3 +10,4 @@ node_modules
 /.vscode-test
 /coverage
 *.tsbuildinfo
+package-lock.json

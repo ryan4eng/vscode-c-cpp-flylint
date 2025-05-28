@@ -2,19 +2,20 @@
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "es2017",
+		"target": "es2018",
 		"outDir": "out",
 		"rootDir": "src",
-		"lib": [ "es2017" ],
+		"lib": [ "es2018" ],
 		"sourceMap": true,
-        "baseUrl": "../",
-        "paths": {
-            "common/*": ["common/*"]
-        }
+		"baseUrl": ".",
+		"paths": {
+		"*": ["*", "../common/*"]
+		}
 	},
 	"include": [
 		"src",
 		"../typings.d.ts",
+		"common"
 	],
 	"exclude": [
 		"node_modules"

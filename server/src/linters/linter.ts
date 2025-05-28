@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as _ from 'lodash';
 import { InternalDiagnostic } from '../server';
-import { Settings } from 'common/types'
+import { Settings } from '../../../common/types'
 import { path as sysPath } from '../utils';
 import * as cross_spawn from 'cross-spawn';
 import * as child_process from 'child_process';
@@ -184,39 +184,40 @@ export class Linter {
     /* istanbul ignore next */
     private async maybeEnable() {
         if (!this.isEnabled()) {
-            return Promise.resolve('');
+            return '';
         }
 
-        return this.maybeExecutablePresent()
-            .then((val) => {
-                this.executable = val;
-
-                return this.maybeConfigFilePresent();
-            });
+        try {
+            this.executable = await this.maybeExecutablePresent();
+            return this.maybeConfigFilePresent();
+        } catch (e) {
+            //console.error("Failed to enable:", e);
+            return '';
+        }
     }
 
     /* istanbul ignore next */
-    private maybeExecutablePresent(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            let paths = new PathEnv();
+    private async maybeExecutablePresent(): Promise<string> {
+        console.error("..6..");
 
-            paths.prepend(path.resolve(__dirname, '../../..'));
+        const paths = new PathEnv();
+        console.error("..7..");
 
-            which(this.executable, { path: paths.toString() }, (err: any, result: any) => {
-                if (err) {
-                    this.disable();
+        paths.prepend(path.resolve(__dirname, '../../..'));
+        console.error("..8..");
 
-                    if (this.settings.debug) {
-                        console.log(`The executable was not found for ${this.name}; looked for ${this.executable}`);
-                    }
+        try {
+            const result = await which(this.executable, { path: paths.toString() });
+            return result;
+        } catch (err) {
+            this.disable();
 
-                    reject(Error(`The executable was not found for ${this.name}, disabling linter`));
-                }
-                else {
-                    resolve(result);
-                }
-            });
-        });
+            if (this.settings.debug) {
+                console.log(`The executable was not found for ${this.name}; looked for ${this.executable}`);
+            }
+
+            throw new Error(`The executable was not found for ${this.name}, disabling linter`);
+        }
     }
 
     /* istanbul ignore next */
@@ -300,7 +301,11 @@ export class Linter {
             console.log('executing: ', cmd, params.join(' '));
         }
 
-        return cross_spawn.sync(cmd, params, { 'cwd': workspaceDir, encoding: 'utf8' });
+        let result = cross_spawn.sync(cmd, params, { 'cwd': workspaceDir, encoding: 'utf8' });
+        if (result.status != 0) {
+            console.log(`linter generated error response code: ${cmd} ${params}`);
+        }
+        return result;
     }
 
     public lint(fileName: string, directory: null | string, tmpFileName: string): InternalDiagnostic[] {
@@ -318,7 +323,7 @@ export class Linter {
 
         /* istanbul ignore if */
         if (result.status !== 0) {
-            console.log(`${this.name} exited with status code ${result.status}`);
+            console.warn(`${this.name} exited with status code ${result.status}`);
         }
 
         return this.parseLines(stdout.concat(stderr));

@@ -4,7 +4,7 @@
 
 import * as _ from 'lodash';
 
-import { CppCheckSeverityMaps, Settings } from 'common/types'
+import { CppCheckSeverityMaps, Settings } from '../../../common/types'
 import { VS_DiagnosticSeverity } from '../settings';
 import { Linter } from './linter';
 import { InternalDiagnostic } from '../server';

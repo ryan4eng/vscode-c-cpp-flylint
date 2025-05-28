@@ -28,7 +28,7 @@ import * as _ from 'lodash';
 import * as glob from 'fast-glob';
 import { EntryItem } from 'fast-glob/out/types';
 import { IConfigurations, propertiesPlatform } from './settings';
-import { GlobalSettings, Settings } from 'common/types'
+import { GlobalSettings, Settings } from '../../common/types'
 import { Linter, Lint, fromLint, toLint } from './linters/linter';
 import { RobustPromises, path as sysPath } from './utils';
 
@@ -219,6 +219,7 @@ async function getDocumentSettings(resource: string): Promise<Settings> {
         let workspaceRoot: string = await getWorkspaceRoot(resource);
         let globalSettings: Thenable<GlobalSettings> = connection.workspace.getConfiguration({ scopeUri: resource }).then(s => getMergedSettings(s, workspaceRoot));
         result = globalSettings.then(v => v[FLYLINT_ID]);
+        //result = result.then(r => connection.sendRequest('resolveVSSymbols', r)); //my addition here
         documentSettings.set(resource, result);
     }
 
@@ -229,13 +230,17 @@ async function getDocumentSettings(resource: string): Promise<Settings> {
 async function reconfigureExtension(currentSettings: Settings, workspaceRoot: string): Promise<Linter[]> {
     let linters: Linter[] = [];  // clear array
 
-    if (currentSettings.clang.enable) { linters.push(await (new Clang(currentSettings, workspaceRoot).initialize()) as Clang); }
-    if (currentSettings.cppcheck.enable) { linters.push(await (new CppCheck(currentSettings, workspaceRoot).initialize()) as CppCheck); }
-    if (currentSettings.flexelint.enable) { linters.push(await (new Flexelint(currentSettings, workspaceRoot).initialize()) as Flexelint); }
-    if (currentSettings.pclintplus.enable) { linters.push(await (new PclintPlus(currentSettings, workspaceRoot).initialize()) as PclintPlus); }
-    if (currentSettings.flawfinder.enable) { linters.push(await (new FlawFinder(currentSettings, workspaceRoot).initialize()) as FlawFinder); }
-    if (currentSettings.lizard.enable) { linters.push(await (new Lizard(currentSettings, workspaceRoot).initialize()) as Lizard); }
-
+    try {
+        if (currentSettings.clang.enable) { linters.push(await (new Clang(currentSettings, workspaceRoot).initialize()) as Clang); }
+        if (currentSettings.cppcheck.enable) { linters.push(await (new CppCheck(currentSettings, workspaceRoot).initialize()) as CppCheck); }
+        if (currentSettings.flexelint.enable) { linters.push(await (new Flexelint(currentSettings, workspaceRoot).initialize()) as Flexelint); }
+        if (currentSettings.pclintplus.enable) { linters.push(await (new PclintPlus(currentSettings, workspaceRoot).initialize()) as PclintPlus); }
+        if (currentSettings.flawfinder.enable) { linters.push(await (new FlawFinder(currentSettings, workspaceRoot).initialize()) as FlawFinder); }
+        if (currentSettings.lizard.enable) { linters.push(await (new Lizard(currentSettings, workspaceRoot).initialize()) as Lizard); }
+    }
+    catch(e) {
+console.error(e);
+    }
     _.forEach(linters, (linter) => {
         if (linter.isActive() && !linter.isEnabled()) {
             connection.window.showWarningMessage(`Unable to activate ${linter.Name()} analyzer.`);
@@ -568,7 +573,7 @@ async function validateTextDocument(textDocument: TextDocument, force: boolean) 
                 }
 
                 let currentFileUri = URI.file(currentFile).toString();
-                diagnostics = _.uniqBy(diagnostics, function(e) { return e.range.start.line + ':::' + e.code + ':::' + e.message; });
+                diagnostics = _.uniqBy(diagnostics, function (e) { return e.range.start.line + ':::' + e.code + ':::' + e.message; });
 
                 if (allDiagnostics.has(currentFileUri)) {
                     allDiagnostics.set(currentFileUri, _.union(allDiagnostics.get(currentFileUri), diagnostics));

@@ -4,7 +4,7 @@
 //
 // istanbul ignore file
 
-import { GlobalSettings } from '../server/src/settings';
+import { GlobalSettings } from '../common/types';
 
 export const isWindows =
     process.platform === 'win32' ||

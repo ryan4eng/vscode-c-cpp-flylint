@@ -5,7 +5,8 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import * as vscode from 'vscode';
-import { Settings, IConfigurations, propertiesPlatform } from '../../server/src/settings';
+import { Settings } from '../../common/types';
+import { IConfigurations, propertiesPlatform } from '../../server/src/settings';
 import { RobustPromises } from '../../server/src/utils';
 
 // inspired by: https://stackoverflow.com/a/69396619

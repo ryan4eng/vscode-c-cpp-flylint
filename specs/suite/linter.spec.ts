@@ -11,7 +11,7 @@ import { Flexelint } from '../../server/src/linters/flexelint';
 import { Linter } from '../../server/src/linters/linter';
 import { Lizard } from '../../server/src/linters/lizard';
 import { PclintPlus } from '../../server/src/linters/pclintplus';
-import { Settings } from '../../server/src/settings';
+import { Settings } from '../../common/types';
 import { defaultConfig } from '../mock-config';
 import { injectMockFileSystem } from '../mock-fs';
 import { FLYLINT_ID } from '../../server/src/server';

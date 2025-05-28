@@ -31,8 +31,13 @@ export class FlylintLanguageClient extends LanguageClient {
             }
             return result;
         });
-        this.protocol2CodeConverter.asDiagnostics = ((diagnostics: ls.Diagnostic[]): code.Diagnostic[] => {
-            return diagnostics.map(this.protocol2CodeConverter.asDiagnostic);
-        });
+        // this.protocol2CodeConverter.asDiagnostics = ((diagnostics: ls.Diagnostic[]): code.Diagnostic[] => {
+        //     return diagnostics.map(this.protocol2CodeConverter.asDiagnostic);
+        // });
+
+        // Assuming this is part of your LanguageClient setup
+        this.protocol2CodeConverter.asDiagnostics = (diagnostics: ls.Diagnostic[]): Promise<code.Diagnostic[]> => {
+            return Promise.resolve(diagnostics.map(diagnostic => this.protocol2CodeConverter.asDiagnostic(diagnostic)));
+        };
     }
 }
