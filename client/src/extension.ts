@@ -239,26 +239,65 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
     context.subscriptions.push(new SettingMonitor(client, `${FLYLINT_ID}.enable`).start());
 }
 
-// @ts-ignore
+interface ResolverContext {
+    workspaceFolder: string;
+    userHome: string;
+}
+
 // Keep your manual resolution function as backup
 function resolveSettingsObject(settings: Settings): Settings {
-    // deep copy so we don't touch the original one
+    // deep copy so we don't touch the original one in case of corruption
     let resolvedSettings = JSON.parse(JSON.stringify(settings));
 
-    // Grab any substitution variables required
-    const workspaceFolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath || '';
-    const userHome = os.homedir();
-
-    resolvedSettings = resolvedSettings
-        .replace(/\${workspaceFolder}/g, workspaceFolder)
-        .replace(/\${userHome}/g, userHome);
-
-    const unresolvedPattern = /\${([^}]+)}/g;
-
-    let match;
-    while ((match = unresolvedPattern.exec(resolvedSettings)) !== null) {
-        console.warn(`Unhandled substitution at '${path.join('.')}' → \${${match[1]}}`);
+    const context: ResolverContext = {
+        workspaceFolder: vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || '',
+        userHome: os.homedir(),
     }
 
-    return resolvedSettings
+    return walkAndResolve(resolvedSettings, context);
+}
+
+function walkAndResolve(obj: any, context: ResolverContext, currentPath: string[] = []): any {
+    if (obj === null || obj === undefined) {
+        return obj;
+    }
+
+    if (typeof obj === 'string') {
+        return resolveString(obj, context, currentPath);
+    }
+
+    if (Array.isArray(obj)) {
+        return obj.map((item, index) =>
+            walkAndResolve(item, context, [...currentPath, index.toString()])
+        );
+    }
+
+    if (typeof obj === 'object') {
+        const resolved: any = {};
+        for (const [key, value] of Object.entries(obj)) {
+            resolved[key] = walkAndResolve(value, context, [...currentPath, key]);
+        }
+        return resolved;
+    }
+
+    // For primitive types (number, boolean, etc.), return as-is
+    return obj;
+}
+
+function resolveString(value: string, context: ResolverContext, currentPath: string[] = []): string {
+    let resolved = value;
+
+    // Replace known variables
+    resolved = resolved.replace(/\${workspaceFolder}/g, context.workspaceFolder);
+    resolved = resolved.replace(/\${userHome}/g, context.userHome);
+
+    // Check for unresolved variables and warn
+    const unresolvedPattern = /\${([^}]+)}/g;
+    let match;
+    while ((match = unresolvedPattern.exec(resolved)) !== null) {
+        const pathStr = currentPath.length > 0 ? currentPath.join('.') : 'root';
+        console.warn(`Unhandled substitution at '${pathStr}' → \${${match[1]}}`);
+    }
+
+    return resolved;
 }
