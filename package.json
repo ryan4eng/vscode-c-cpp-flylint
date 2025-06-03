@@ -37,7 +37,7 @@
     "c++",
     "cppcheck",
     "flexelint",
-    "clang",
+    "clangtidy",
     "lint",
     "linter"
   ],
@@ -243,27 +243,27 @@
       },
       {
         "type": "object",
-        "title": "Clang",
+        "title": "Clangtidy",
         "properties": {
-          "c-cpp-flylint.clang.enable": {
+          "c-cpp-flylint.clangtidy.enable": {
             "order": 0,
             "type": "boolean",
             "default": true,
-            "description": "Enable or disable the Clang linter"
+            "description": "Enable or disable the Clang-tidy linter"
           },
-          "c-cpp-flylint.clang.executable": {
+          "c-cpp-flylint.clangtidy.executable": {
             "order": 1,
             "type": "string",
-            "description": "This option allows you to override the executable called when using Clang",
-            "default": "clang"
+            "description": "This option allows you to override the executable called when using Clang-tidy",
+            "default": "clang-tidy"
           },
-          "c-cpp-flylint.clang.configFile": {
+          "c-cpp-flylint.clangtidy.configFile": {
             "order": 2,
             "type": "string",
-            "description": "A .clang_complete file to use/fallback to if no config file is found in the current project",
-            "default": ".clang_complete"
+            "description": "A .clang-tidy file to use/fallback to if no config file is found in the current project",
+            "default": ".clang-tidy"
           },
-          "c-cpp-flylint.clang.includePaths": {
+          "c-cpp-flylint.clangtidy.includePaths": {
             "order": 3,
             "type": [
               "array",
@@ -272,7 +272,7 @@
             "default": null,
             "description": "Paths to search for include files. They may be relative or absolute. If not specified it falls back to \"c-cpp-flylint.includePaths\""
           },
-          "c-cpp-flylint.clang.standard": {
+          "c-cpp-flylint.clangtidy.standard": {
             "order": 4,
             "type": [
               "array",
@@ -281,7 +281,7 @@
             "default": null,
             "description": "The language standards to check against. For example, one or more of: posix, c89, c99, c11, c17, c18, c++03, c++11, c++14, c++17, c++20."
           },
-          "c-cpp-flylint.clang.defines": {
+          "c-cpp-flylint.clangtidy.defines": {
             "order": 5,
             "type": [
               "array",
@@ -290,7 +290,7 @@
             "default": null,
             "description": "Preprocessor symbols to define. If not specified it falls back to \"c-cpp-flylint.defines\""
           },
-          "c-cpp-flylint.clang.undefines": {
+          "c-cpp-flylint.clangtidy.undefines": {
             "order": 6,
             "type": [
               "array",
@@ -299,7 +299,7 @@
             "default": null,
             "description": "Preprocessor symbols to undefine."
           },
-          "c-cpp-flylint.clang.language": {
+          "c-cpp-flylint.clangtidy.language": {
             "order": 7,
             "type": [
               "string",
@@ -308,7 +308,7 @@
             "default": null,
             "description": "Force Clang to check all files as the given language."
           },
-          "c-cpp-flylint.clang.extraArgs": {
+          "c-cpp-flylint.clangtidy.extraArgs": {
             "order": 8,
             "type": [
               "array",
@@ -317,7 +317,7 @@
             "default": null,
             "description": "Extra verbatim command-line arguments to include on the Clang command-line invocation."
           },
-          "c-cpp-flylint.clang.warnings": {
+          "c-cpp-flylint.clangtidy.warnings": {
             "order": 9,
             "type": [
               "array",
@@ -329,7 +329,7 @@
             ],
             "description": "Warnings to include in the analysis. Default is everything possible."
           },
-          "c-cpp-flylint.clang.includes": {
+          "c-cpp-flylint.clangtidy.includes": {
             "order": 10,
             "type": [
               "array",
@@ -338,7 +338,7 @@
             "default": null,
             "description": "An array of files to directly include with every processed file. Operates via utilizing Clang's -include parameter."
           },
-          "c-cpp-flylint.clang.standardLibs": {
+          "c-cpp-flylint.clangtidy.standardLibs": {
             "order": 11,
             "type": [
               "array",
@@ -347,43 +347,43 @@
             "default": null,
             "description": "The standard libraries to utilize. Operates via utilizing Clang's -stdlib parameter. Some macOS and BSD systems need to use a special library for C++11 support."
           },
-          "c-cpp-flylint.clang.pedantic": {
+          "c-cpp-flylint.clangtidy.pedantic": {
             "order": 12,
             "type": "boolean",
             "default": false,
             "description": "Enable or disable the -pedantic command-line argument to Clang."
           },
-          "c-cpp-flylint.clang.pedanticErrors": {
+          "c-cpp-flylint.clangtidy.pedanticErrors": {
             "order": 13,
             "type": "boolean",
             "default": false,
             "description": "Enable or disable the -pedantic-errors command-line argument to Clang."
           },
-          "c-cpp-flylint.clang.msExtensions": {
+          "c-cpp-flylint.clangtidy.msExtensions": {
             "order": 14,
             "type": "boolean",
             "default": false,
             "description": "Enable or disable the -fms-extensions command-line argument to Clang."
           },
-          "c-cpp-flylint.clang.noExceptions": {
+          "c-cpp-flylint.clangtidy.noExceptions": {
             "order": 15,
             "type": "boolean",
             "default": false,
             "description": "Enable or disable the -fno-exceptions command-line argument to Clang."
           },
-          "c-cpp-flylint.clang.noRtti": {
+          "c-cpp-flylint.clangtidy.noRtti": {
             "order": 16,
             "type": "boolean",
             "default": false,
             "description": "Enable or disable the -fno-rtti command-line argument to Clang."
           },
-          "c-cpp-flylint.clang.blocks": {
+          "c-cpp-flylint.clangtidy.blocks": {
             "order": 17,
             "type": "boolean",
             "default": true,
             "description": "Enable or disable the -fblocks command-line argument to Clang."
           },
-          "c-cpp-flylint.clang.severityLevels": {
+          "c-cpp-flylint.clangtidy.severityLevels": {
             "order": 18,
             "type": "object",
             "description": "Maps the severity levels of Clang to VSCode severity levels (Error, Warning, Information, Hint). Setting to 'None' will not show the severity type at all.",

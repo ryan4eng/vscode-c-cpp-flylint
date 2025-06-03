@@ -51,13 +51,13 @@ export function injectMockFileSystem() {
             }),
 
             // fake EXE for Windows users
-            'clang.exe': mock.file({
+            'clang-tidy.exe': mock.file({
                 content: 'I MISS DOS...',
                 mode: 0o755
             }),
 
             // fake binary for non-Windows users
-            'clang': mock.file({
+            'clang-tidy': mock.file({
                 content: '#!/usr/bin/env bash\n\nexit 0\n',
                 mode: 0o755
             }),

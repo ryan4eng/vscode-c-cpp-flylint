@@ -2,15 +2,14 @@
 {
     "cSpell.enabled": false,
     "editor.formatOnSave": true,
-    "c-cpp-flylint.clang.enable": true,
-    "c-cpp-flylint.clang.executable": "clang",
+    "c-cpp-flylint.clangtidy.enable": true,
+    "c-cpp-flylint.clangtidy.executable": "clang-tidy",
     "c-cpp-flylint.cppcheck.enable": false,
     "c-cpp-flylint.cppcheck.force": true,
     // "c-cpp-flylint.cppcheck.extraArgs": ["-j", "6"],
     "c-cpp-flylint.debug": true,
     "c-cpp-flylint.flexelint.executable": "/home/jbenden/Source/FlexeLint_Workstation/flexelint8/src/flexelint",
     "c-cpp-flylint.flexelint.enable": false,
-    "c-cpp-flylint.pclintplus.enable": true,
     "files.associations": {
         "*.rst": "restructuredtext",
         "rsync.h": "c",

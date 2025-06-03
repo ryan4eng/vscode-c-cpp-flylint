@@ -72,7 +72,7 @@ export const defaultConfig: GlobalSettings = {
         cppcheck: {
             enable: true,
             executable: (isWindows ? 'cppcheck.exe' : 'cppcheck'),
-            configFile: '.clang_complete',
+            configFile: '.cpp_complete',
             unusedFunctions: false,
             verbose: false,
             force: false,
@@ -96,9 +96,9 @@ export const defaultConfig: GlobalSettings = {
             extraArgs: null,
         },
 
-        clang: {
+        clangtidy: {
             enable: true,
-            executable: (isWindows ? 'clang.exe' : 'clang'),
+            executable: (isWindows ? 'clang-tidy.exe' : 'clang-tidy'),
             configFile: '.clang_complete',
             severityLevels: {
                 error: 'Error',

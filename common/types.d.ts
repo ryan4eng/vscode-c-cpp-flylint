@@ -92,7 +92,7 @@ export interface Settings {
         severityLevels: CppCheckSeverityMaps;
         extraArgs: string[] | null;
     }
-    clang: {
+    clangtidy: {
         enable: boolean;
         executable: string;
         configFile: string;

@@ -4,7 +4,7 @@
 
 import { cloneDeep } from 'lodash';
 import { basename } from 'path';
-import { Clang } from '../../server/src/linters/clang';
+import { ClangTidy } from '../../server/src/linters/clangtidy';
 import { CppCheck } from '../../server/src/linters/cppcheck';
 import { FlawFinder } from '../../server/src/linters/flawfinder';
 import { Flexelint } from '../../server/src/linters/flexelint';
@@ -24,9 +24,9 @@ describe('Analyser executables', () => {
 
     describe.each([
         {
-            formal_name: 'Clang',
-            binary_name: 'clang',
-            claz: (c: Settings, p: string) => { return new Clang(c, p); }
+            formal_name: 'ClangTidy',
+            binary_name: 'clang-tidy',
+            claz: (c: Settings, p: string) => { return new ClangTidy(c, p); }
         }, {
             formal_name: 'CppCheck',
             binary_name: 'cppcheck',

@@ -4,7 +4,7 @@
 
 import { cloneDeep } from 'lodash';
 import { DiagnosticSeverity } from 'vscode-languageserver/node';
-import { Clang } from '../../server/src/linters/clang';
+import { ClangTidy } from '../../server/src/linters/clangtidy';
 import { Linter } from '../../server/src/linters/linter';
 import { Settings } from '../../common/types';
 import { defaultConfig } from '../mock-config';
@@ -19,7 +19,7 @@ describe('Clang parser', () => {
 
     beforeEach(() => {
         config = cloneDeep(defaultConfig[FLYLINT_ID]);
-        linter = new Clang(config, process.cwd());
+        linter = new ClangTidy(config, process.cwd());
     });
 
     test('should build a proper DOS command-line for a C++ source file', () => {

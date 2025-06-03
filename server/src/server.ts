@@ -32,7 +32,7 @@ import { GlobalSettings, Settings } from '../../common/types'
 import { Linter, Lint, fromLint, toLint } from './linters/linter';
 import { RobustPromises, path as sysPath } from './utils';
 
-import { Clang } from './linters/clang';
+import { ClangTidy } from './linters/clangtidy';
 import { CppCheck } from './linters/cppcheck';
 import { FlawFinder } from './linters/flawfinder';
 import { Flexelint } from './linters/flexelint';
@@ -231,7 +231,7 @@ async function reconfigureExtension(currentSettings: Settings, workspaceRoot: st
     let linters: Linter[] = [];  // clear array
 
     try {
-        if (currentSettings.clang.enable) { linters.push(await (new Clang(currentSettings, workspaceRoot).initialize()) as Clang); }
+        if (currentSettings.clangtidy.enable) { linters.push(await (new ClangTidy(currentSettings, workspaceRoot).initialize()) as ClangTidy); }
         if (currentSettings.cppcheck.enable) { linters.push(await (new CppCheck(currentSettings, workspaceRoot).initialize()) as CppCheck); }
         if (currentSettings.flexelint.enable) { linters.push(await (new Flexelint(currentSettings, workspaceRoot).initialize()) as Flexelint); }
         if (currentSettings.pclintplus.enable) { linters.push(await (new PclintPlus(currentSettings, workspaceRoot).initialize()) as PclintPlus); }
