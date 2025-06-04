@@ -41,7 +41,7 @@ export class ClangTidy extends Linter {
         }
 
         //clang import from gcc important
-        if (this.settings.clangtidy.includePaths.length) {
+        if (this.settings.clangtidy.includePaths?.length) {
             //add to assume any system includes
             args.push("--extra-arg=-isystem");
             for (const item of this.settings.clangtidy.includePaths) {
