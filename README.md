@@ -8,6 +8,30 @@
 
 </div>
 
+This work was originally done by [jbenden]([GitHub - jbenden/vscode-c-cpp-flylint: A VS Code extension for advanced, modern, static analysis of C/C++ that supports a number of back-end analyzer programs.](https://github.com/jbenden/vscode-c-cpp-flylint)). For every hour of work I put into this, they put in a months work, so full credit to them on this.
+
+I did the following:
+
+- butchered some of their code
+
+- updated some node modules
+
+- butchered some more code to make the new node modules work
+
+- brought in an update from [wwpreseton]([Fix for missing results by wwpreston · Pull Request #234 · jbenden/vscode-c-cpp-flylint · GitHub](https://github.com/jbenden/vscode-c-cpp-flylint/pull/234)) for some missing items
+
+- updated the configuration to pass through `console_commands.json`
+
+- changed the `clang` implementation to `clang-tidy`
+
+- removed `Flexelint` and `PC-lint` in favor of `PC-lint Plus` because its the newer version that I personally am working with - I just got sick of seeing old stuff I couldn't get a license to ;)
+
+- and broke all the tests
+
+I am pretty terrible at TypeScript so I hope my AI slop works for everyone else too!
+
+----------------
+
 A [Visual Studio Code](https://code.visualstudio.com/) extension
 supporting a number of static code analyzers for C and C++ code.
 
@@ -27,8 +51,8 @@ supporting a number of static code analyzers for C and C++ code.
 * [CppCheck](http://cppcheck.sourceforge.net/)
 * [FlawFinder](https://dwheeler.com/flawfinder/)
 * [PC-lint Plus](https://gimpel.com/)
-* [Flexelint](http://www.gimpel.com/html/flex.htm) or
-  [PC-lint](http://www.gimpel.com/html/pcl.htm)
+* ~~[Flexelint](http://www.gimpel.com/html/flex.htm)~~ or
+  ~~[PC-lint](http://www.gimpel.com/html/pcl.htm)~~
 * [lizard](https://github.com/terryyin/lizard)
 
 ## Requirements

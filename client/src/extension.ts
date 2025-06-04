@@ -25,7 +25,6 @@ const WORKSPACE_IS_TRUSTED_KEY = 'WORKSPACE_IS_TRUSTED_KEY';
 const SECURITY_SENSITIVE_CONFIG: string[] = [
     'clang-tidy.executable',
     'cppcheck.executable',
-    'flexelint.executable',
     'flawfinder.executable',
     'lizard.executable',
     'pclintplus.executable',

@@ -15,18 +15,6 @@ export function injectMockFileSystem() {
             'tsconfig.json': 'text content',
 
             // fake EXE for Windows users
-            'flexelint.exe': mock.file({
-                content: 'I MISS DOS...',
-                mode: 0o755
-            }),
-
-            // fake binary for non-Windows users
-            'flexelint': mock.file({
-                content: '#!/usr/bin/env bash\n\nexit 0\n',
-                mode: 0o755
-            }),
-
-            // fake EXE for Windows users
             'pclp.exe': mock.file({
                 content: 'I MISS DOS...',
                 mode: 0o755

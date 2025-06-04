@@ -26,27 +26,6 @@ export const defaultConfig: GlobalSettings = {
         excludeFromWorkspacePaths: [],
         compileCommandsPath: '',
 
-        flexelint: {
-            enable: true,
-            executable: (isWindows ? 'flexelint.exe' : 'flexelint'),
-            configFile: 'tsconfig.json',
-            headerArgs: [
-                '-e750',
-                '-e751',
-                '-e752',
-                '-e753',
-                '-e754',
-                '-e1526',
-                '-e1714'
-            ],
-            severityLevels: {
-                Error: 'Error',
-                Warning: 'Warning',
-                Info: 'Information',
-                Note: 'Hint'
-            }
-        },
-
         pclintplus: {
             enable: true,
             executable: (isWindows ? 'pclp.exe' : 'pclp'),

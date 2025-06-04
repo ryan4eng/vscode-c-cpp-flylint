@@ -12,13 +12,6 @@ export interface CppCheckSeverityMaps {
     information: SeverityLevel;
 }
 
-export interface FlexelintSeverityMaps {
-    Error: SeverityLevel;
-    Warning: SeverityLevel;
-    Info: SeverityLevel;
-    Note: SeverityLevel;
-}
-
 export interface ClangSeverityMaps {
     fatal: SeverityLevel;
     error: SeverityLevel;
@@ -59,13 +52,6 @@ export interface Settings {
     language: 'c' | 'c++';
     compileCommandsPath: string;
 
-    flexelint: {
-        enable: boolean;
-        executable: string;
-        configFile: string;
-        headerArgs: string | string[];
-        severityLevels: FlexelintSeverityMaps;
-    }
     pclintplus: {
         enable: boolean;
         executable: string;

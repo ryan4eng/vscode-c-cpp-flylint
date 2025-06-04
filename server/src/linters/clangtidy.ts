@@ -41,9 +41,19 @@ export class ClangTidy extends Linter {
         }
 
         //clang import from gcc important
-        args.push("--extra-arg=-isystem");
-        args.push("--extra-arg=C:/SysGCC/arm-eabi/arm-none-eabi/include");
-        args.push("--extra-arg=--target=arm-none-eabi");
+        if (this.settings.clangtidy.includePaths.length) {
+            //add to assume any system includes
+            args.push("--extra-arg=-isystem");
+            for (const item of this.settings.clangtidy.includePaths) {
+                args.push(`--extra-arg=${item}`);
+            }
+        }
+
+        if (this.settings.clangtidy.extraArgs?.length) {
+            for (const item of this.settings.clangtidy.extraArgs) {
+                args.push(`--extra-arg=${item}`);
+            }
+        }
 
         //formatting related
         args.push("--use-color=false");

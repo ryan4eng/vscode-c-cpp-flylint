@@ -35,7 +35,6 @@ import { RobustPromises, path as sysPath } from './utils';
 import { ClangTidy } from './linters/clangtidy';
 import { CppCheck } from './linters/cppcheck';
 import { FlawFinder } from './linters/flawfinder';
-import { Flexelint } from './linters/flexelint';
 import { PclintPlus } from './linters/pclintplus';
 import { Lizard } from './linters/lizard';
 
@@ -233,7 +232,6 @@ async function reconfigureExtension(currentSettings: Settings, workspaceRoot: st
     try {
         if (currentSettings.clangtidy.enable) { linters.push(await (new ClangTidy(currentSettings, workspaceRoot).initialize()) as ClangTidy); }
         if (currentSettings.cppcheck.enable) { linters.push(await (new CppCheck(currentSettings, workspaceRoot).initialize()) as CppCheck); }
-        if (currentSettings.flexelint.enable) { linters.push(await (new Flexelint(currentSettings, workspaceRoot).initialize()) as Flexelint); }
         if (currentSettings.pclintplus.enable) { linters.push(await (new PclintPlus(currentSettings, workspaceRoot).initialize()) as PclintPlus); }
         if (currentSettings.flawfinder.enable) { linters.push(await (new FlawFinder(currentSettings, workspaceRoot).initialize()) as FlawFinder); }
         if (currentSettings.lizard.enable) { linters.push(await (new Lizard(currentSettings, workspaceRoot).initialize()) as Lizard); }
