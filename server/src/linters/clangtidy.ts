@@ -70,7 +70,7 @@ export class ClangTidy extends Linter {
             return null;
         }
 
-        let excludeRegex = /^(WX.*|_WX.*|__WX.*|Q_.*|warning: .* incompatible with .*|warning: .* input unused|warning: include location .* is unsafe for cross-compilation.*|\s+\d+\s*\|\s+.*|\s+\|\s+~\^~\s*)$/;
+        let excludeRegex = /^(WX.*|_WX.*|__WX.*|Q_.*|warning: .* incompatible with .*|warning: .* input unused|warning: include location .* is unsafe for cross-compilation.*|\s+\d+\s*\|\s+.*|\s+\|\s+.*|(\d+ warnings?)?( and)?\s?(\d+ errors?)? generated.|Error while processing .*)$/;
         if (excludeRegex.exec(line) !== null) {
             // skip this line
             return null;
