@@ -613,8 +613,13 @@ async function validateTextDocument(textDocument: TextDocument, force: boolean) 
             if (acceptFile) {
                 let uri = URI.file(currentFilePath);
 
-                connection.sendDiagnostics({ uri: uri.toString(), diagnostics: [] });
-                connection.sendDiagnostics({ uri: uri.toString(), diagnostics });
+                try {
+                    connection.sendDiagnostics({ uri: uri.toString(), diagnostics: [] });
+                    connection.sendDiagnostics({ uri: uri.toString(), diagnostics });
+                }
+                catch (e: any) {
+                    console.error(`Error sending diagnostics for ${currentFilePath}: ${e.message}`);
+                }
             }
         }
     };

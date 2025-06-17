@@ -169,7 +169,7 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
             // ----------------------------------------------------------------
 
             // Here we must watch for all extension dependencies to start and be ready.
-            var untilReadyRetries = 40; // 40x250 = 10 seconds maximum
+            let untilReadyRetries = 40; // 40x250 = 10 seconds maximum
             const untilReady = async () => {
                 try {
                     await commands.executeCommand('cpptools.activeConfigName');

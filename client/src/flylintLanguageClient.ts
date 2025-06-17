@@ -19,6 +19,15 @@ export class FlylintLanguageClient extends LanguageClient {
         super(id, name, serverOptions, clientOptions, forceDebug);
         let originalAsDiagnostic = this.protocol2CodeConverter.asDiagnostic;
         this.protocol2CodeConverter.asDiagnostic = ((diagnostic: ls.Diagnostic): code.Diagnostic => {
+            /** Safety to try and stop some edge cases */
+            if (diagnostic.range.end.line == -1) {
+                diagnostic.range.end.line = 0;
+            }
+
+            if (diagnostic.range.start.line == -1) {
+                diagnostic.range.start.line = 0;
+            }
+
             let result = originalAsDiagnostic(diagnostic);
             if ((result.code !== undefined) && (typeof result.code === 'string') && (queryUrlStr.length > 0)) {
                 let codeStr = String(result.code);
@@ -31,9 +40,6 @@ export class FlylintLanguageClient extends LanguageClient {
             }
             return result;
         });
-        // this.protocol2CodeConverter.asDiagnostics = ((diagnostics: ls.Diagnostic[]): code.Diagnostic[] => {
-        //     return diagnostics.map(this.protocol2CodeConverter.asDiagnostic);
-        // });
 
         // Assuming this is part of your LanguageClient setup
         this.protocol2CodeConverter.asDiagnostics = (diagnostics: ls.Diagnostic[]): Promise<code.Diagnostic[]> => {

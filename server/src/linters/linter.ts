@@ -307,7 +307,7 @@ export class Linter {
     public lint(fileName: string, directory: null | string, tmpFileName: string): InternalDiagnostic[] {
         if (!this.enabled) { return []; }
 
-        let result = this.runLinter(this.buildCommandLine(fileName, tmpFileName), directory || this.workspaceRoot);
+        let result = this.runLinter(this.buildCommandLine(fileName, tmpFileName), directory ?? this.workspaceRoot);
         let stdout = result.stdout !== null ? result.stdout.replace(/\r/g, '').split('\n') : [];
         let stderr = result.stderr !== null ? result.stderr.replace(/\r/g, '').split('\n') : [];
 
@@ -327,7 +327,7 @@ export class Linter {
 
     /* istanbul ignore next */
     protected isQuote(ch: string): boolean {
-        return ch === '\'' || ch === '\"';
+        return ch === '\'' || ch === '"';
     }
 
     protected parseLines(lines: string[]): InternalDiagnostic[] {
