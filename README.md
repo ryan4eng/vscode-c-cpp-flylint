@@ -8,7 +8,7 @@
 
 </div>
 
-This work was originally done by [jbenden]([GitHub - jbenden/vscode-c-cpp-flylint: A VS Code extension for advanced, modern, static analysis of C/C++ that supports a number of back-end analyzer programs.](https://github.com/jbenden/vscode-c-cpp-flylint)). For every hour of work I put into this, they put in a months work, so full credit to them on this.
+This work was originally done by [jbenden](https://github.com/jbenden/vscode-c-cpp-flylint). For every hour of work I put into this, they put in a months work, so full credit to them on this.
 
 I did the following:
 
@@ -18,7 +18,7 @@ I did the following:
 
 - butchered some more code to make the new node modules work
 
-- brought in an update from [wwpreseton]([Fix for missing results by wwpreston · Pull Request #234 · jbenden/vscode-c-cpp-flylint · GitHub](https://github.com/jbenden/vscode-c-cpp-flylint/pull/234)) for some missing items
+- brought in an update from [wwpreseton](https://github.com/jbenden/vscode-c-cpp-flylint/pull/234) for some missing items
 
 - updated the configuration to pass through `console_commands.json`
 
@@ -29,6 +29,16 @@ I did the following:
 - and broke all the tests
 
 I am pretty terrible at TypeScript so I hope my AI slop works for everyone else too!
+
+To do a release, do the following
+
+```batch
+npm install -g @vscode/vsce
+npm run compile
+vsce package
+```
+
+
 
 ----------------
 
