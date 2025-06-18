@@ -81,6 +81,11 @@ export class CppCheck extends Linter {
     }
 
     protected parseLine(line: string): InternalDiagnostic | null {
+        // skip empty lines
+        if (line.length == 0) {
+            return null;
+        }
+
         let regex = /^(.+?)\s\s([0-9]+)\s([0-9]+\s)?\s(style|information|portability|performance|warning|error)\s(.+?):\s(.*)$/;
         let regexArray: RegExpExecArray | null;
 
@@ -103,7 +108,7 @@ export class CppCheck extends Linter {
             };
         } else {
             return {
-                parseError: 'Line could not be parsed: ' + line,
+                parseError: 'Cppcheck Line could not be parsed: ' + line,
                 fileName: '',
                 line: 0,
                 column: 0,

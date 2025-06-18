@@ -28,6 +28,11 @@ export class FlylintLanguageClient extends LanguageClient {
                 diagnostic.range.start.line = 0;
             }
 
+            /** Safety - this stop any further messages from going through if its not caught. */
+            if (diagnostic.message == '') {
+                diagnostic.message = '...';
+            }
+
             let result = originalAsDiagnostic(diagnostic);
             if ((result.code !== undefined) && (typeof result.code === 'string') && (queryUrlStr.length > 0)) {
                 let codeStr = String(result.code);

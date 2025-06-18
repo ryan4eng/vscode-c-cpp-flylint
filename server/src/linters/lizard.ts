@@ -28,6 +28,11 @@ export class Lizard extends Linter {
     }
 
     protected parseLine(line: string): InternalDiagnostic | null {
+        // skip empty lines
+        if (line.length == 0) {
+            return null;
+        }
+
         let regex = /^([a-zA-Z]?:?[^:]+):(\d+)?:? warning: (.+)$/;
         let regexArray: RegExpExecArray | null;
         let excludeRegex = /^$/;
@@ -49,7 +54,7 @@ export class Lizard extends Linter {
             };
         } else {
             return {
-                parseError: 'Line could not be parsed: ' + line,
+                parseError: 'Lizard Line could not be parsed: ' + line,
                 fileName: '',
                 line: 0,
                 column: 0,

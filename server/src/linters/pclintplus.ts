@@ -59,6 +59,11 @@ export class PclintPlus extends Linter {
     }
 
     protected parseLine(line: string): InternalDiagnostic | null {
+        // skip empty lines
+        if (line.length == 0) {
+            return null;
+        }
+
         let regex = /^(([^ ]+)?\s\s([0-9]+)\s([0-9]+\s)?\s([iI]nfo|[wW]arning|[eE]rror|[nN]ote|[sS]upplemental)\s([0-9]+):\s(.*)|(.+?):([0-9]+):([0-9]+:)?\s([iI]nfo|[wW]arning|[eE]rror|[nN]ote|[sS]upplemental)\s([0-9]+):\s(.*))$/;
         let regexArray: RegExpExecArray | null;
 
@@ -110,7 +115,7 @@ export class PclintPlus extends Linter {
             }
         } else {
             return {
-                parseError: 'Line could not be parsed: ' + line,
+                parseError: 'pclintplus Line could not be parsed: ' + line,
                 fileName: '',
                 line: 0,
                 column: 0,

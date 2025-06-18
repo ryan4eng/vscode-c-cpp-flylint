@@ -236,8 +236,8 @@ async function reconfigureExtension(currentSettings: Settings, workspaceRoot: st
         if (currentSettings.flawfinder.enable) { linters.push(await (new FlawFinder(currentSettings, workspaceRoot).initialize()) as FlawFinder); }
         if (currentSettings.lizard.enable) { linters.push(await (new Lizard(currentSettings, workspaceRoot).initialize()) as Lizard); }
     }
-    catch(e) {
-console.error(e);
+    catch (e) {
+        console.error(e);
     }
     _.forEach(linters, (linter) => {
         if (linter.isActive() && !linter.isEnabled()) {
@@ -587,40 +587,45 @@ async function validateTextDocument(textDocument: TextDocument, force: boolean) 
     tmpDocument.removeCallback();
 
     let sendDiagnosticsToEditor = (diagnostics: Diagnostic[], currentFile: string) => {
-        let currentFilePath = sysPath(URI.parse(currentFile).fsPath);
-        let normalizedCurrentFilePath = currentFilePath;
-        let normalizedWorkspaceRoot = sysPath(path.normalize(workspaceRoot!));
+        try {
+            let currentFilePath = sysPath(URI.parse(currentFile).fsPath);
+            let normalizedCurrentFilePath = currentFilePath;
+            let normalizedWorkspaceRoot = sysPath(path.normalize(workspaceRoot!));
 
-        if (normalizedCurrentFilePath.startsWith(normalizedWorkspaceRoot)) {
-            let acceptFile: boolean = true;
+            if (normalizedCurrentFilePath.startsWith(normalizedWorkspaceRoot)) {
+                let acceptFile: boolean = true;
 
-            // see if we are to accept the diagnostics upon this file.
-            _.each(settings.excludeFromWorkspacePaths, (excludedPath) => {
-                let normalizedExcludedPath = path.normalize(excludedPath);
+                // see if we are to accept the diagnostics upon this file.
+                _.each(settings.excludeFromWorkspacePaths, (excludedPath) => {
+                    let normalizedExcludedPath = path.normalize(excludedPath);
 
-                if (!path.isAbsolute(normalizedExcludedPath)) {
-                    // prepend the workspace path and renormalize the path.
-                    normalizedExcludedPath = path.normalize(path.join(workspaceRoot!, normalizedExcludedPath));
-                }
+                    if (!path.isAbsolute(normalizedExcludedPath)) {
+                        // prepend the workspace path and renormalize the path.
+                        normalizedExcludedPath = path.normalize(path.join(workspaceRoot!, normalizedExcludedPath));
+                    }
 
-                // does the document match our excluded path?
-                if (normalizedCurrentFilePath.startsWith(sysPath(normalizedExcludedPath))) {
-                    // it did; so do not accept diagnostics from this file.
-                    acceptFile = false;
-                }
-            });
+                    // does the document match our excluded path?
+                    if (normalizedCurrentFilePath.startsWith(sysPath(normalizedExcludedPath))) {
+                        // it did; so do not accept diagnostics from this file.
+                        acceptFile = false;
+                    }
+                });
 
-            if (acceptFile) {
-                let uri = URI.file(currentFilePath);
+                if (acceptFile) {
+                    let uri = URI.file(currentFilePath);
 
-                try {
-                    connection.sendDiagnostics({ uri: uri.toString(), diagnostics: [] });
-                    connection.sendDiagnostics({ uri: uri.toString(), diagnostics });
-                }
-                catch (e: any) {
-                    console.error(`Error sending diagnostics for ${currentFilePath}: ${e.message}`);
+                    try {
+                        connection.sendDiagnostics({ uri: uri.toString(), diagnostics: [] });
+                        connection.sendDiagnostics({ uri: uri.toString(), diagnostics });
+                    }
+                    catch (e: any) {
+                        console.error(`Error sending diagnostics for ${currentFilePath}: ${e.message}`);
+                    }
                 }
             }
+        }
+        catch (e: any) {
+            tracker.add(`Error while sending diagnostics for ${currentFile}: ${e.message}`);
         }
     };
 

@@ -31,6 +31,11 @@ export class FlawFinder extends Linter {
     }
 
     protected parseLine(line: string): InternalDiagnostic | null {
+        // skip empty lines
+        if (line.length == 0) {
+            return null;
+        }
+
         let regex = /^([a-zA-Z]?:?[^:]+):(\d+):(\d+)?:?\s\s\[([0-5])] ([^:]+):(.+)$/;
         let regexArray: RegExpExecArray | null;
 
@@ -54,7 +59,7 @@ export class FlawFinder extends Linter {
             };
         } else {
             return {
-                parseError: 'Line could not be parsed: ' + line,
+                parseError: 'Flawfinder Line could not be parsed: ' + line,
                 fileName: '',
                 line: 0,
                 column: 0,

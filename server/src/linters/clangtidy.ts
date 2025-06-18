@@ -72,22 +72,22 @@ export class ClangTidy extends Linter {
     }
 
     protected parseLine(line: string): InternalDiagnostic | null {
-        let regex = /^(.+?):([0-9]+):([0-9]+):\s(fatal|error|warning|note)(?: error)?:\s(.*)$/;
-        let regexArray: RegExpExecArray | null;
-
-        if (line === '') {
-            // skip this line
+        // skip empty lines
+        if (line.length == 0) {
             return null;
         }
 
-        let excludeRegex = /^(WX.*|_WX.*|__WX.*|Q_.*|warning: .* incompatible with .*|warning: .* input unused|warning: include location .* is unsafe for cross-compilation.*|\s+\d+\s*\|\s+.*|\s+\|\s+.*|(\d+ warnings?)?( and)?\s?(\d+ errors?)? generated.|Error while processing .*)$/;
+        let regex = /^(.+?):(\d+):(\d+):\s(fatal|error|warning|note)(?: error)?:\s(.*)$/;
+        let regexArray: RegExpExecArray | null;
+
+        let excludeRegex = /^(WX.*|_WX.*|__WX.*|Q_.*|warning: .* incompatible with .*|warning: .* input unused|warning: include location .* is unsafe for cross-compilation.*|\s+\d+\s*\|\s+.*|\s+\|\s+.*|(\d+ warnings?)?( and)?\s?(\d+ errors?)? generated.|Error while processing .*|.*\[clang-diagnostic-error\]|.*\[clang-diagnostic-ignored-optimization-argument\])$/;
         if (excludeRegex.exec(line) !== null) {
             // skip this line
             return null;
         }
 
         let inFileArray: RegExpExecArray | null;
-        let inFileRegex = /^In file included from (.+?):([0-9]+):$/;
+        let inFileRegex = /^In file included from (.+?):(\d+):$/;
 
         if ((inFileArray = inFileRegex.exec(line)) !== null) {
             return {
@@ -102,6 +102,11 @@ export class ClangTidy extends Linter {
         }
 
         if ((regexArray = regex.exec(line)) !== null) {
+            if (regexArray[5].length === 0) {
+                /** Skip empty message, will cause issues down the track... */
+                return null;
+            }
+
             return {
                 fileName: (regexArray[1] === this.tmpFileName ? this.actualFileName : regexArray[1]),
                 line: parseInt(regexArray[2]) - 1,
@@ -113,7 +118,7 @@ export class ClangTidy extends Linter {
             };
         } else {
             return {
-                parseError: 'Line could not be parsed: ' + line,
+                parseError: 'Clangtidy Line could not be parsed: ' + line,
                 fileName: '',
                 line: 0,
                 column: 0,

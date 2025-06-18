@@ -290,7 +290,7 @@ export class Linter {
     }
 
     protected runLinter(params: string[], workspaceDir: string): child_process.SpawnSyncReturns<string> {
-        let cmd = params.shift() || this.executable;
+        let cmd = params.shift() ?? this.executable;
 
         /* istanbul ignore if */
         if (this.settings.debug) {
@@ -360,6 +360,7 @@ export class Linter {
                 if (currentParsed !== null && !currentParsed.parseError) {
                     // output an entry
                     results.push(currentParsed);
+                    console.log(`Outputting diagnostic: ${JSON.stringify(currentParsed)}`);
                 }
 
                 currentParsed = parsed;
